@@ -6,7 +6,7 @@ async function bootstrap() {
   })
 
   fastify.get('/pools/count', () => {
-    return { count: 1848373 }
+    return { count: 2548373 }
   })
 
   await fastify.listen({ port: 3333 })
