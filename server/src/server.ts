@@ -1,12 +1,9 @@
 import Fastify from 'fastify'
 import cors from '@fastify/cors'
-import { PrismaClient } from '@prisma/client'
 import { z } from 'zod'
 import ShortUniqueId from 'short-unique-id'
-
-const prisma = new PrismaClient({
-  log: ['query'],
-})
+import { prisma } from './lib/prisma'
+import { poolRoutes } from './routes/pool'
 
 async function bootstrap() {
   const fastify = Fastify({
@@ -17,10 +14,8 @@ async function bootstrap() {
     origin: true,
   })
 
-  fastify.get('/pools/count', async () => {
-    const pool = await prisma.pool.count()
-    return { pool }
-  })
+
+  fastify.register(poolRoutes)
 
   fastify.get('/users/count', async () => {
     const user = await prisma.user.count()
