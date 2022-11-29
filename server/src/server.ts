@@ -5,6 +5,7 @@ import ShortUniqueId from 'short-unique-id'
 import { prisma } from './lib/prisma'
 import { poolRoutes } from './routes/pool'
 import { userRoutes } from './routes/user'
+import { guessRoutes } from './routes/guess'
 
 async function bootstrap() {
   const fastify = Fastify({
@@ -20,10 +21,7 @@ async function bootstrap() {
 
   fastify.register(userRoutes)
 
-  fastify.get('/guesses/count', async () => {
-    const guess = await prisma.guess.count()
-    return { guess }
-  })
+  fastify.register(guessRoutes)
 
   fastify.post('/pools', async (request, reply) => {
     const createPoolBody = z.object({
