@@ -11,7 +11,7 @@ export async function authRoutes(fastify: FastifyInstance){
     const { access_token } = createUserBody.parse(request.body)
    
     const userResponse = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
-      method: 'GET',
+       method: 'GET',
       headers: {
         Authorization: `Bearer ${access_token}`
       }
@@ -45,6 +45,14 @@ export async function authRoutes(fastify: FastifyInstance){
       })
     }
 
-    return { userInfo }
+    const token = fastify.jwt.sign({
+      name: user.name,
+      avatarUrl: user.avatarUrl,
+    },{
+      sub: user.id,
+      expiresIn: '7 days',      
+    })    
+
+    return { token }
   })
 }

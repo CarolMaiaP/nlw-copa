@@ -1,13 +1,11 @@
 import Fastify from 'fastify'
 import cors from '@fastify/cors'
-import { z } from 'zod'
-import ShortUniqueId from 'short-unique-id'
-import { prisma } from './lib/prisma'
 import { poolRoutes } from './routes/pool'
 import { userRoutes } from './routes/user'
 import { guessRoutes } from './routes/guess'
 import { authRoutes } from './routes/auth'
 import { gameRoutes } from './routes/game'
+import jwt from '@fastify/jwt'
 
 async function bootstrap() {
   const fastify = Fastify({
@@ -29,7 +27,12 @@ async function bootstrap() {
 
   await fastify.register(userRoutes)
 
+  await fastify.register(jwt, {
+    secret: 'nwlcopa',
+  })
+
   await fastify.listen({ port: 3333 })
+
 }
 
 bootstrap()
